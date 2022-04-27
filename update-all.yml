@@ -37,8 +37,6 @@
     - name: esperador
       shell: sleep 60 #Tiempo de espera en segundos que creemos necesario para que el cluster vuelva a poder cambiar los recursos de nodo.
 
-# Mover recursos o Deshabilitar al nodo que acaba de actualizar      
-
 # Ponemos el nodo que se va a actualizar en offline(en este caso el server2)
 - hosts: server2
   gather_facts: no
