@@ -1,2 +1,2 @@
 # Ansible
- Archivos de Ansible creados para el tutor
+ Estos archivos son archivos de Ansible que permiten crear y borrar usuarios. Y tambien permiten actualizar maquinas que estan en un cluster de apaches(pacemaker) o en el caso de los tomcat con loadbalancer.
