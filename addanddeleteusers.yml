@@ -1,0 +1,27 @@
+---
+- hosts: all
+  remote_user: admin
+  become: yes
+  tasks:
+    - name: Add several users
+      ansible.builtin.user:
+        name: "{{ item }}"
+        state: present
+        append: yes
+        create_home: yes
+        groups: "wheel"
+        shell: /bin/bash
+      loop:
+         - userexample1
+         - userexample2
+         - userexample3
+         - userexample4
+         - userexample5
+
+    - name: Delete several users
+      ansible.builtin.user:
+        name: "{{ item }}"
+        state: absent
+        remove: yes
+      loop:
+         - userexample1
