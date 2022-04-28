@@ -65,81 +65,60 @@
 
 # -- PARTE DE TOMCAT -- #
 
-# Gracefully disable a member from a loadbalancer node:
-- name: Step 1
-  community.general.apache2_mod_proxy:
-    balancer_vhost: '{{ vhost_host }}' # (ipv4|ipv6|fqdn):port of the Apache httpd 2.4 mod_proxy balancer pool.
-    member_host: '{{ member.host }}' # (ipv4|ipv6|fqdn) of the balancer member to get or to set attributes to. Port number is autodetected and should not be specified here.
-    state: drained
-  delegate_to: myloadbalancernode 
-
-- name: Step 2
-  ansible.builtin.wait_for:
-    host: '{{ member.host }}' 
-    port: '{{ member.port }}' 
-    state: drained
-  delegate_to: myloadbalancernode
-
-- name: Step 3
-  community.general.apache2_mod_proxy:
-    balancer_vhost: '{{ vhost_host }}' # (ipv4|ipv6|fqdn):port of the Apache httpd 2.4 mod_proxy balancer pool.
-    member_host: '{{ member.host }}' # (ipv4|ipv6|fqdn) of the balancer member to get or to set attributes to. Port number is autodetected and should not be specified here.
-    state: absent
-  delegate_to: myloadbalancernode
-
-
-# Actualizamos el nodo que esta offline
+#Actualizamos un nodo
 - hosts: server3
   remote_user: admin
   become: yes
   tasks:
+    - name: Step 1
+      community.general.apache2_mod_proxy:
+        balancer_vhost: '{{ vhost_host }}' # (ipv4|ipv6|fqdn):port of the Apache httpd 2.4 mod_proxy balancer pool.
+        member_host: '{{ member.host }}' # (ipv4|ipv6|fqdn) of the balancer member to get or to set attributes to. Port number is autodetected and should not be specified here.
+        state: drained
+    - name: Step 2
+      ansible.builtin.wait_for:
+        host: '{{ member.host }}' 
+        port: '{{ member.port }}' 
+        state: drained
+    - name: Step 3
+      community.general.apache2_mod_proxy:
+        balancer_vhost: '{{ vhost_host }}' # (ipv4|ipv6|fqdn):port of the Apache httpd 2.4 mod_proxy balancer pool.
+        member_host: '{{ member.host }}' # (ipv4|ipv6|fqdn) of the balancer member to get or to set attributes to. Port number is autodetected and should not be specified here.
+        state: absent
     - name: Escribir mensaje
       yum: name=* state=latest 
+    - name: Step 3
+      community.general.apache2_mod_proxy:
+        balancer_vhost: '{{ vhost_host }}' # (ipv4|ipv6|fqdn):port of the Apache httpd 2.4 mod_proxy balancer pool.
+        member_host: '{{ member.host }}'  # (ipv4|ipv6|fqdn) of the balancer member to get or to set attributes to. Port number is autodetected and should not be specified here.
+        state: present
 
-- name: Step 3
-  community.general.apache2_mod_proxy:
-    balancer_vhost: '{{ vhost_host }}' # (ipv4|ipv6|fqdn):port of the Apache httpd 2.4 mod_proxy balancer pool.
-    member_host: '{{ member.host }}'  # (ipv4|ipv6|fqdn) of the balancer member to get or to set attributes to. Port number is autodetected and should not be specified here.
-    state: present
 
+#Actualizamos el otro nodo
 - hosts: server4
   remote_user: admin
   become: yes
   tasks:
-    - name: esperador
-      shell: sleep 60
-
-- name: Step 1
-  community.general.apache2_mod_proxy:
-    balancer_vhost: '{{ vhost_host }}' # (ipv4|ipv6|fqdn):port of the Apache httpd 2.4 mod_proxy balancer pool.
-    member_host: '{{ member.host }}' # (ipv4|ipv6|fqdn) of the balancer member to get or to set attributes to. Port number is autodetected and should not be specified here.
-    state: drained
-  delegate_to: myloadbalancernode 
-
-- name: Step 2
-  ansible.builtin.wait_for:
-    host: '{{ member.host }}' 
-    port: '{{ member.port }}' 
-    state: drained
-  delegate_to: myloadbalancernode
-
-- name: Step 3
-  community.general.apache2_mod_proxy:
-    balancer_vhost: '{{ vhost_host }}' # (ipv4|ipv6|fqdn):port of the Apache httpd 2.4 mod_proxy balancer pool.
-    member_host: '{{ member.host }}' # (ipv4|ipv6|fqdn) of the balancer member to get or to set attributes to. Port number is autodetected and should not be specified here.
-    state: absent
-  delegate_to: myloadbalancernode
-
-# Actualizamos el nodo que esta offline
-- hosts: server4
-  remote_user: admin
-  become: yes
-  tasks:
+    - name: Step 1
+      community.general.apache2_mod_proxy:
+        balancer_vhost: '{{ vhost_host }}' # (ipv4|ipv6|fqdn):port of the Apache httpd 2.4 mod_proxy balancer pool.
+        member_host: '{{ member.host }}' # (ipv4|ipv6|fqdn) of the balancer member to get or to set attributes to. Port number is autodetected and should not be specified here.
+        state: drained
+    - name: Step 2
+      ansible.builtin.wait_for:
+        host: '{{ member.host }}' 
+        port: '{{ member.port }}' 
+        state: drained
+      delegate_to: myloadbalancernode
+    - name: Step 3
+      community.general.apache2_mod_proxy:
+        balancer_vhost: '{{ vhost_host }}' # (ipv4|ipv6|fqdn):port of the Apache httpd 2.4 mod_proxy balancer pool.
+        member_host: '{{ member.host }}' # (ipv4|ipv6|fqdn) of the balancer member to get or to set attributes to. Port number is autodetected and should not be specified here.
+        state: absent
     - name: Escribir mensaje
       yum: name=* state=latest 
-
-- name: Step 3
-  community.general.apache2_mod_proxy:
-    balancer_vhost: '{{ vhost_host }}'
-    member_host: '{{ member.host }}'
-    state: present
+    - name: Step 3
+      community.general.apache2_mod_proxy:
+      balancer_vhost: '{{ vhost_host }}'
+      member_host: '{{ member.host }}'
+      state: present
