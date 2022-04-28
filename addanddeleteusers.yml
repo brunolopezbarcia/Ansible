@@ -12,11 +12,11 @@
         groups: "wheel"
         shell: /bin/bash
       loop:               #<---Usuarios que se van a agregar
-         - dcarmar2
-         - jvilman1
-         - aseoros1
-         - jgardie2
-         - asanqui2
+         - userexample1
+         - userexample2
+         - userexample3
+         - userexample4
+         - userexample5
 
     - name: Delete several users
       ansible.builtin.user:
@@ -24,4 +24,4 @@
         state: absent
         remove: yes       #<---Indica que se va a eliminar el directorio personal
       loop:               #<---Usuarios que se van a eliminar
-         - dcarmar2
+         - userexample1
